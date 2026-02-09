@@ -118,10 +118,6 @@ graph TD
 
 ---
 
-## 👨‍💻 Author
-
-**Professional Junior Software Engineer**  
-*Focused on Building Intelligent, Customer-Centric Banking Solutions.*
 
 ---
 *Built with ❤️ for digital banking innovation.*
