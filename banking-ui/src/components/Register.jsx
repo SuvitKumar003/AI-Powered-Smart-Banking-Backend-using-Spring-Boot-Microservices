@@ -90,10 +90,13 @@ const Register = () => {
                         <Phone className="input-icon" size={20} />
                         <input
                             type="text"
-                            placeholder="Phone Number"
+                            placeholder="Phone Number (10 digits)"
                             className="premium-input"
                             value={formData.phoneNumber}
                             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                            pattern="[0-9]{10}"
+                            title="Phone number must be exactly 10 digits"
+                            required
                         />
                     </div>
 
@@ -101,7 +104,7 @@ const Register = () => {
                         <Lock className="input-icon" size={20} />
                         <input
                             type="password"
-                            placeholder="Create Password"
+                            placeholder="Password (Min 6 chars + Digit + Special)"
                             className="premium-input"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}

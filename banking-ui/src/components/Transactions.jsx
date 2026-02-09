@@ -43,7 +43,8 @@ const Transactions = () => {
             setNewTx({ type: 'DEBIT', amount: '', description: '', merchantName: '', location: '' })
             fetchTransactions()
         } catch (err) {
-            alert('Transaction failed. Check your balance.')
+            const errorMessage = err.response?.data?.message || 'Transaction failed. Please try again.';
+            alert(errorMessage);
         } finally {
             setProcessing(false)
         }

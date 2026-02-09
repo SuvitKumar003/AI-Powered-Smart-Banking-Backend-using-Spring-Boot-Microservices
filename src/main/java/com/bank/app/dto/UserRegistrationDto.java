@@ -23,12 +23,14 @@ public class UserRegistrationDto {
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[@#$%^&+=!]).*$", message = "Password must contain at least one digit and one special character (@#$%^&+=!)")
     private String password;
 
     @NotBlank(message = "Full name is required")
     @Size(max = 100, message = "Full name must not exceed 100 characters")
     private String fullName;
 
-    @Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number must be 10-15 digits")
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
     private String phoneNumber;
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { userService, transactionService, insightService } from '../services/api'
 import { Wallet, TrendingUp, TrendingDown, Clock, Brain, ShieldCheck, ArrowRight } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'

@@ -92,13 +92,15 @@
             <version>2.3.0</version>
         </dependency>
         
-        <!-- Spring Boot DevTools (Hot reload) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+<!-- DevTools removed due to JDK 25 compatibility issues with hot-reload -->
+<!--
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+    <optional>true</optional>
+</dependency>
+-->
         
         <!-- Spring Boot Test -->
         <dependency>

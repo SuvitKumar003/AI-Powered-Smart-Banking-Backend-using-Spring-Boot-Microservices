@@ -58,3 +58,7 @@ banking-ui/node_modules/
 banking-ui/dist/
 frontend/node_modules/
 frontend/dist/
+
+# Database
+data/
+h2_check.txt
