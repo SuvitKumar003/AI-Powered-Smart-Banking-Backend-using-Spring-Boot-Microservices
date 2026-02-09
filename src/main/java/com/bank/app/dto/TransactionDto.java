@@ -1,0 +1,37 @@
+package com.bank.app.dto;
+
+import com.bank.app.model.TransactionCategory;
+import com.bank.app.model.TransactionType;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TransactionDto {
+
+    private Long id;
+
+    @NotNull(message = "Transaction type is required")
+    private TransactionType type;
+
+    @NotNull(message = "Amount is required")
+    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
+    private BigDecimal amount;
+
+    @Size(max = 500, message = "Description must not exceed 500 characters")
+    private String description;
+
+    private TransactionCategory category;
+    private LocalDateTime timestamp;
+    private BigDecimal fraudRiskScore;
+    private String merchantName;
+    private String location;
+}

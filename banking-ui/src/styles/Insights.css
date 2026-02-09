@@ -1,0 +1,72 @@
+.insights-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    gap: 2rem;
+}
+
+.insight-chart-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.insight-chart-card h3 {
+    align-self: flex-start;
+    margin-bottom: 2rem;
+}
+
+.ai-tips-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.tip-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    align-items: flex-start;
+}
+
+.tip-icon {
+    background: rgba(255, 255, 255, 0.05);
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tip-content h4 {
+    margin-bottom: 0.5rem;
+}
+
+.tip-content p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.tip-content strong {
+    color: var(--text);
+}
+
+.premium-tip {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(99, 102, 241, 0.1));
+    border: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+@media (max-width: 1100px) {
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+}

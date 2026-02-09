@@ -1,0 +1,60 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+/logs/
+build_log.txt
+run_log.txt
+backend_log.txt
+frontend_log.txt
+
+### Node/Frontend ###
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.env*
+!.env.example
+
+# Frontend folders
+banking-ui/node_modules/
+banking-ui/dist/
+frontend/node_modules/
+frontend/dist/
