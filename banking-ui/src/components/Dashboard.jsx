@@ -9,23 +9,26 @@ const Dashboard = () => {
     const [profile, setProfile] = useState(null)
     const [recentTransactions, setRecentTransactions] = useState([])
     const [insights, setInsights] = useState([])
+    const [monthlySummary, setMonthlySummary] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [profileRes, transRes, insightRes] = await Promise.all([
+                const [profileRes, transRes, insightRes, summaryRes] = await Promise.all([
                     userService.getProfile(),
                     transactionService.getAll(),
-                    insightService.getCategoryWise()
+                    insightService.getCategoryWise(),
+                    insightService.getMonthlySummary()
                 ])
                 setProfile(profileRes.data)
                 setRecentTransactions(transRes.data.slice(0, 5))
+                setMonthlySummary(summaryRes.data)
 
                 // Transform insights for chart
-                const chartData = Object.entries(insightRes.data).map(([name, value]) => ({
-                    name,
-                    value: parseFloat(value.replace('%', ''))
+                const chartData = insightRes.data.map(item => ({
+                    name: item.categoryName,
+                    value: item.percentage
                 }))
                 setInsights(chartData)
             } catch (err) {
@@ -66,14 +69,14 @@ const Dashboard = () => {
                     <div className="stat-icon income"><TrendingUp /></div>
                     <div className="stat-info">
                         <p>Monthly Income</p>
-                        <h3>$0.00</h3>
+                        <h3>${monthlySummary?.totalIncome.toLocaleString() || '0.00'}</h3>
                     </div>
                 </div>
                 <div className="stat-card glass-card">
                     <div className="stat-icon expense"><TrendingDown /></div>
                     <div className="stat-info">
                         <p>Monthly Spent</p>
-                        <h3>$0.00</h3>
+                        <h3>${monthlySummary?.totalSpending.toLocaleString() || '0.00'}</h3>
                     </div>
                 </div>
             </div>

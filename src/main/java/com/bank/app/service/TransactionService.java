@@ -21,95 +21,87 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
 
-    private final TransactionRepository transactionRepository;
-    private final UserRepository userRepository;
-    private final AiCategorizationService aiService;
-    private final UserService userService;
+        private final TransactionRepository transactionRepository;
+        private final UserRepository userRepository;
+        private final AiCategorizationService aiService;
+        private final UserService userService;
 
-    @Transactional
-    public TransactionDto createTransaction(String username, TransactionDto transactionDto) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        @Transactional
+        public TransactionDto createTransaction(String username, TransactionDto transactionDto) {
+                User user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Check balance for debit transactions
-        if (transactionDto.getType() == TransactionType.DEBIT) {
-            if (user.getAccountBalance().compareTo(transactionDto.getAmount()) < 0) {
-                throw new InsufficientBalanceException("Insufficient account balance");
-            }
+                // Check balance for debit transactions
+                if (transactionDto.getType() == TransactionType.DEBIT) {
+                        if (user.getAccountBalance().compareTo(transactionDto.getAmount()) < 0) {
+                                throw new InsufficientBalanceException("Insufficient account balance");
+                        }
+                }
+
+                // AI-powered categorization
+                TransactionCategory category = aiService.categorizeTransaction(transactionDto.getDescription());
+
+                // Create transaction
+                Transaction transaction = new Transaction();
+                transaction.setType(transactionDto.getType());
+                transaction.setAmount(transactionDto.getAmount());
+                transaction.setDescription(transactionDto.getDescription());
+                transaction.setCategory(category);
+                transaction.setUser(user);
+                transaction.setMerchantName(transactionDto.getMerchantName());
+                transaction.setLocation(transactionDto.getLocation());
+
+                Transaction savedTransaction = transactionRepository.save(transaction);
+
+                // Update account balance
+                userService.updateAccountBalance(
+                                user.getId(),
+                                transactionDto.getAmount(),
+                                transactionDto.getType() == TransactionType.CREDIT);
+
+                return mapToDto(savedTransaction);
         }
 
-        // AI-powered categorization
-        TransactionCategory category = aiService.categorizeTransaction(transactionDto.getDescription());
+        public List<TransactionDto> getTransactionHistory(String username) {
+                User user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Create transaction
-        Transaction transaction = new Transaction();
-        transaction.setType(transactionDto.getType());
-        transaction.setAmount(transactionDto.getAmount());
-        transaction.setDescription(transactionDto.getDescription());
-        transaction.setCategory(category);
-        transaction.setUser(user);
-        transaction.setMerchantName(transactionDto.getMerchantName());
-        transaction.setLocation(transactionDto.getLocation());
+                return transactionRepository.findByUserIdOrderByTimestampDesc(user.getId())
+                                .stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
 
-        // Calculate fraud risk
-        transaction.setFraudRiskScore(
-                aiService.calculateFraudRiskScore(
-                        transactionDto.getAmount(),
-                        transactionDto.getDescription(),
-                        transactionDto.getLocation()));
+        public List<TransactionDto> filterByCategory(String username, TransactionCategory category) {
+                User user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        Transaction savedTransaction = transactionRepository.save(transaction);
+                return transactionRepository.findByUserIdAndCategory(user.getId(), category)
+                                .stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
 
-        // Update account balance
-        userService.updateAccountBalance(
-                user.getId(),
-                transactionDto.getAmount(),
-                transactionDto.getType() == TransactionType.CREDIT);
+        public List<TransactionDto> filterByDateRange(String username, LocalDateTime start, LocalDateTime end) {
+                User user = userRepository.findByUsername(username)
+                                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        return mapToDto(savedTransaction);
-    }
+                return transactionRepository.findByUserIdAndTimestampBetween(user.getId(), start, end)
+                                .stream()
+                                .map(this::mapToDto)
+                                .collect(Collectors.toList());
+        }
 
-    public List<TransactionDto> getTransactionHistory(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        return transactionRepository.findByUserIdOrderByTimestampDesc(user.getId())
-                .stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<TransactionDto> filterByCategory(String username, TransactionCategory category) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        return transactionRepository.findByUserIdAndCategory(user.getId(), category)
-                .stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<TransactionDto> filterByDateRange(String username, LocalDateTime start, LocalDateTime end) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        return transactionRepository.findByUserIdAndTimestampBetween(user.getId(), start, end)
-                .stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    private TransactionDto mapToDto(Transaction transaction) {
-        TransactionDto dto = new TransactionDto();
-        dto.setId(transaction.getId());
-        dto.setType(transaction.getType());
-        dto.setAmount(transaction.getAmount());
-        dto.setDescription(transaction.getDescription());
-        dto.setCategory(transaction.getCategory());
-        dto.setTimestamp(transaction.getTimestamp());
-        dto.setFraudRiskScore(transaction.getFraudRiskScore());
-        dto.setMerchantName(transaction.getMerchantName());
-        dto.setLocation(transaction.getLocation());
-        return dto;
-    }
+        private TransactionDto mapToDto(Transaction transaction) {
+                TransactionDto dto = new TransactionDto();
+                dto.setId(transaction.getId());
+                dto.setType(transaction.getType());
+                dto.setAmount(transaction.getAmount());
+                dto.setDescription(transaction.getDescription());
+                dto.setCategory(transaction.getCategory());
+                dto.setTimestamp(transaction.getTimestamp());
+                dto.setMerchantName(transaction.getMerchantName());
+                dto.setLocation(transaction.getLocation());
+                return dto;
+        }
 }

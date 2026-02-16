@@ -31,7 +31,6 @@ public class TransactionDto {
 
     private TransactionCategory category;
     private LocalDateTime timestamp;
-    private BigDecimal fraudRiskScore;
     private String merchantName;
     private String location;
 }

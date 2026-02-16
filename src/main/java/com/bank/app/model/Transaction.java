@@ -42,9 +42,6 @@ public class Transaction {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(precision = 3, scale = 2)
-    private BigDecimal fraudRiskScore = BigDecimal.ZERO;
-
     @Column(length = 100)
     private String merchantName;
 

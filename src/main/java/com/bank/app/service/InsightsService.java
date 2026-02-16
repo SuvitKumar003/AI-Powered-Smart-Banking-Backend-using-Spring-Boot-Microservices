@@ -79,10 +79,16 @@ public class InsightsService {
             monthlySpending = BigDecimal.ZERO;
         }
 
+        BigDecimal monthlyIncome = transactionRepository.getTotalIncome(user.getId(), startOfMonth);
+        if (monthlyIncome == null) {
+            monthlyIncome = BigDecimal.ZERO;
+        }
+
         Map<String, Object> summary = new HashMap<>();
         summary.put("month", LocalDateTime.now().getMonth().toString());
         summary.put("year", LocalDateTime.now().getYear());
         summary.put("totalSpending", monthlySpending);
+        summary.put("totalIncome", monthlyIncome);
         summary.put("currentBalance", user.getAccountBalance());
         summary.put("totalTransactions", user.getTransactions().size());
 
