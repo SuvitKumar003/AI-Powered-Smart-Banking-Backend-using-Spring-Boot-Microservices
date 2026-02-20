@@ -22,6 +22,11 @@
     margin-bottom: 2rem;
 }
 
+.pie-container {
+    width: 100%;
+    height: 420px;
+}
+
 .ai-tips-section {
     display: flex;
     flex-direction: column;

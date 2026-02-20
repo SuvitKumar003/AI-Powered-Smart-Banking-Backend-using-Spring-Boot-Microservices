@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { userService, transactionService, insightService } from '../services/api'
-import { Wallet, TrendingUp, TrendingDown, Clock, Brain, ShieldCheck, ArrowRight } from 'lucide-react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
+import { Wallet, TrendingUp, TrendingDown, Clock, Brain, ArrowRight, PieChart as PieIcon } from 'lucide-react'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts'
 import '../styles/Dashboard.css'
 
 const Dashboard = () => {
@@ -28,7 +28,7 @@ const Dashboard = () => {
                 // Transform insights for chart
                 const chartData = insightRes.data.map(item => ({
                     name: item.categoryName,
-                    value: item.percentage
+                    value: item.totalAmount
                 }))
                 setInsights(chartData)
             } catch (err) {
@@ -84,8 +84,8 @@ const Dashboard = () => {
             <div className="dashboard-content">
                 <div className="main-section glass-card">
                     <div className="section-header">
-                        <h3>AI Spending Breakdown</h3>
-                        <p>Percentage of spending by intelligent categories</p>
+                        <h3>AI Spending Analysis</h3>
+                        <p>Spending amounts by intelligent categories</p>
                     </div>
                     <div className="chart-container">
                         <ResponsiveContainer width="100%" height={300}>
@@ -96,6 +96,7 @@ const Dashboard = () => {
                                 <Tooltip
                                     contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
                                     itemStyle={{ color: '#fff' }}
+                                    formatter={(value) => `$${value.toFixed(2)}`}
                                 />
                                 <Bar dataKey="value" radius={[10, 10, 0, 0]}>
                                     {insights.map((entry, index) => (
@@ -108,6 +109,34 @@ const Dashboard = () => {
                 </div>
 
                 <div className="side-section">
+                    <div className="spending-pie glass-card">
+                        <div className="section-header">
+                            <h3>Spending Breakup</h3>
+                        </div>
+                        <div className="chart-container pie">
+                            <ResponsiveContainer width="100%" height={180}>
+                                <PieChart>
+                                    <Pie
+                                        data={insights}
+                                        innerRadius={50}
+                                        outerRadius={70}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {insights.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip
+                                        contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                                        itemStyle={{ color: '#fff' }}
+                                        formatter={(value) => `$${value.toFixed(2)}`}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
                     <div className="recent-activity glass-card">
                         <div className="section-header">
                             <h3>Recent Activity</h3>
@@ -121,7 +150,14 @@ const Dashboard = () => {
                                             {tx.type === 'DEBIT' ? <TrendingDown size={18} /> : <TrendingUp size={18} />}
                                         </div>
                                         <div className="activity-details">
-                                            <p className="activity-title">{tx.merchantName || tx.description}</p>
+                                            <p className="activity-title">
+                                                {tx.merchantName || tx.description}
+                                                {tx.riskLevel && (
+                                                    <span className={`risk-badge risk-${tx.riskLevel.toLowerCase()}`}>
+                                                        {tx.riskLevel} Risk
+                                                    </span>
+                                                )}
+                                            </p>
                                             <p className="activity-meta">{tx.category} • {new Date(tx.timestamp).toLocaleDateString()}</p>
                                         </div>
                                         <div className={`activity-amount ${tx.type.toLowerCase()}`}>
@@ -133,16 +169,6 @@ const Dashboard = () => {
                                 <p className="empty-state">No transactions yet. Star spending to see AI in action!</p>
                             )}
                         </div>
-                    </div>
-
-                    <div className="ai-edge-card glass-card">
-                        <div className="edge-icon"><ShieldCheck color="#10b981" /></div>
-                        <h3>Fraud Protection</h3>
-                        <p>Your AI security engine has scanned all transactions. Everything looks safe!</p>
-                        <div className="risk-meter">
-                            <div className="risk-level" style={{ width: '5%' }}></div>
-                        </div>
-                        <span className="risk-text">System Risk: Low</span>
                     </div>
                 </div>
             </div>

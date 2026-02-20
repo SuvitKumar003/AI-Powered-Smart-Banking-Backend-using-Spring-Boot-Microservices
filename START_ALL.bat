@@ -5,6 +5,17 @@ echo ==========================================
 echo 🔥 Banking AI System: One-Click Startup 🔥
 echo ==========================================
 
+:: Use system default Java and Maven (already verified in PATH)
+echo 🛠️ Checking environment...
+java -version
+mvn -version
+python --version
+node -v
+
+:: 0. Clean Port 8000 (if AI service was left running)
+echo 🧹 Cleaning up Port 8000...
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8000') do taskkill /F /PID %%a >nul 2>&1
+
 :: 1. Check for Python
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
@@ -18,11 +29,15 @@ if %errorlevel% neq 0 (
 echo 🧠 Starting Python AI Microservice...
 start "AI-Service (FastAPI)" cmd /k "cd ml-service && echo 📦 Installing dependencies... && pip install -r requirements.txt && echo 🚀 Starting FastAPI... && python main.py"
 
-:: 3. Wait a few seconds for Python to warm up
-echo ⏳ Waiting for AI Service to initialize...
+:: 3. Start Frontend UI in a NEW window
+echo 💻 Starting Frontend UI...
+start "Banking-UI (Vite)" cmd /k "cd banking-ui && echo 📦 Installing dependencies... && npm install && echo 🚀 Starting UI (Vite)... && npm run dev"
+
+:: 4. Wait a few seconds for services to warm up
+echo ⏳ Waiting for services to initialize...
 timeout /t 5 /nobreak >nul
 
-:: 4. Start Spring Boot Backend
+:: 5. Start Spring Boot Backend
 echo ☕ Starting Spring Boot Backend...
 echo (In this window)
 

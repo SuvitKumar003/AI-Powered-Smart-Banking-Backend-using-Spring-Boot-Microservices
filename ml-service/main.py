@@ -96,6 +96,50 @@ def predict_category(request: TransactionRequest):
         "category_name": CATEGORIES[category_id]
     }
 
+from sklearn.ensemble import IsolationForest
+import numpy as np
+
+# ... (rest of imports and previous model code)
+
+# ==========================================
+# 4. FRAUD DETECTION ENGINE
+# ==========================================
+# We use Isolation Forest for Anomaly Detection
+# In a real app, this would be trained on the specific user's history
+# Here, we seed it with "Normal" banking behavior (small/medium amounts)
+normal_data = np.array([
+    [10.0], [25.0], [50.0], [100.0], [15.0], [200.0], [45.0], [80.0], [120.0], [30.0]
+])
+fraud_detector = IsolationForest(contamination=0.1, random_state=42)
+fraud_detector.fit(normal_data)
+
+class FraudCheckRequest(BaseModel):
+    amount: float
+    description: str
+
+@app.post("/fraud-check")
+def check_fraud(request: FraudCheckRequest):
+    # Predict (-1 for anomaly, 1 for normal)
+    prediction = fraud_detector.predict([[request.amount]])
+    
+    # Calculate a pseudo risk score based on distance from training data
+    # (Simplified for demo purposes)
+    if prediction[0] == -1:
+        risk_level = "HIGH"
+        risk_score = 0.85
+    elif request.amount > 500:
+        risk_level = "MEDIUM"
+        risk_score = 0.45
+    else:
+        risk_level = "LOW"
+        risk_score = 0.05
+
+    return {
+        "amount": request.amount,
+        "risk_level": risk_level,
+        "risk_score": risk_score
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

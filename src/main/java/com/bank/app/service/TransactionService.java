@@ -1,6 +1,7 @@
 package com.bank.app.service;
 
 import com.bank.app.dto.TransactionDto;
+import com.bank.app.dto.FraudCheckResponse;
 import com.bank.app.exception.InsufficientBalanceException;
 import com.bank.app.exception.ResourceNotFoundException;
 import com.bank.app.model.Transaction;
@@ -41,6 +42,10 @@ public class TransactionService {
                 // AI-powered categorization
                 TransactionCategory category = aiService.categorizeTransaction(transactionDto.getDescription());
 
+                // AI-powered fraud detection
+                var fraudResponse = aiService.checkFraud(transactionDto.getDescription(),
+                                transactionDto.getAmount().doubleValue());
+
                 // Create transaction
                 Transaction transaction = new Transaction();
                 transaction.setType(transactionDto.getType());
@@ -50,6 +55,8 @@ public class TransactionService {
                 transaction.setUser(user);
                 transaction.setMerchantName(transactionDto.getMerchantName());
                 transaction.setLocation(transactionDto.getLocation());
+                transaction.setFraudRiskScore(fraudResponse.getRisk_score());
+                transaction.setRiskLevel(fraudResponse.getRisk_level());
 
                 Transaction savedTransaction = transactionRepository.save(transaction);
 
@@ -102,6 +109,8 @@ public class TransactionService {
                 dto.setTimestamp(transaction.getTimestamp());
                 dto.setMerchantName(transaction.getMerchantName());
                 dto.setLocation(transaction.getLocation());
+                dto.setFraudRiskScore(transaction.getFraudRiskScore());
+                dto.setRiskLevel(transaction.getRiskLevel());
                 return dto;
         }
 }

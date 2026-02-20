@@ -33,4 +33,6 @@ public class TransactionDto {
     private LocalDateTime timestamp;
     private String merchantName;
     private String location;
+    private Double fraudRiskScore;
+    private String riskLevel;
 }

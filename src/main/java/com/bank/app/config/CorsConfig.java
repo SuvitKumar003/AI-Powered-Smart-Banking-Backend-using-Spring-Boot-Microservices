@@ -14,7 +14,11 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(@org.springframework.lang.NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173", "http://localhost:3000") // Common frontend ports
+                        .allowedOrigins(
+                                "http://localhost:5173",
+                                "http://localhost:5174",
+                                "http://localhost:5175",
+                                "http://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

@@ -77,7 +77,6 @@ const Transactions = () => {
                             <th>Date</th>
                             <th>Description</th>
                             <th>Category</th>
-                            <th>Fraud Risk</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
@@ -98,16 +97,6 @@ const Transactions = () => {
                                             {tx.category}
                                         </span>
                                     </td>
-                                    <td>
-                                        <div className="tx-risk-cell">
-                                            <div className="risk-indicator">
-                                                <div
-                                                    className={`risk-dot ${tx.fraudRiskScore > 0.5 ? 'high' : 'low'}`}
-                                                />
-                                                <span>{tx.fraudRiskScore.toFixed(2)}</span>
-                                            </div>
-                                        </div>
-                                    </td>
                                     <td className={`tx-amount ${tx.type.toLowerCase()}`}>
                                         {tx.type === 'DEBIT' ? '-' : '+'}${tx.amount.toFixed(2)}
                                     </td>
@@ -115,7 +104,7 @@ const Transactions = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" className="empty-table">No transactions found.</td>
+                                <td colSpan="4" className="empty-table">No transactions found.</td>
                             </tr>
                         )}
                     </tbody>

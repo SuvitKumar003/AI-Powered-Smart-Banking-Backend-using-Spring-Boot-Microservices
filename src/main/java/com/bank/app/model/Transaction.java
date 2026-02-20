@@ -46,4 +46,7 @@ public class Transaction {
     private String merchantName;
 
     private String location;
+
+    private Double fraudRiskScore;
+    private String riskLevel;
 }
