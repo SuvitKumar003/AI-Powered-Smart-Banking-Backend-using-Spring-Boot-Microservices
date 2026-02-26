@@ -1,123 +1,60 @@
 # 🏦 AI-Powered Smart-Banking Platform
 
-> **Next-Gen Digital Banking Solution** featuring AI-driven transaction intelligence, real-time risk assessment, and a premium Glassmorphism dashboard.
-
-[![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://www.oracle.com/java/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.2-6db33f.svg)](https://spring.io/projects/spring-boot)
-[![Vite](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-646cff.svg)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+> **Advanced Digital Banking Suite** featuring a Microservices-inspired bridge between Spring Boot (Java) and PyTorch (Python).
 
 ---
 
-## � Project Highlights (Metrics)
+## 🏗️ Technical Architecture
+This project demonstrates a high-performance **Microservices-lite** approach, decoupling heavy business logic from specialized AI computations.
 
-Designed to meet the high standards of digital-first banks like **Wio Bank**, focusing on intelligence, security, and performance.
-
-*   � **Performance**: Optimized REST API achieving **<50ms average response time**.
-*   🤖 **AI Intelligence**: **95%+ accuracy** in automated transaction categorization.
-*   � **Security**: Stateless **JWT implementation** with zero-trust validation patterns.
-*   🎨 **UX/UI**: Modern **Glassmorphism design** with 60FPS smooth data visualization.
-*   💾 **Reliability**: Integrated **file-based H2 persistence** for local data stability.
+### 🌐 The "Java-Python Bridge"
+*   **Core Engine (Spring Boot 3.2.2):** Handles user accounts, transaction ledgers, and secure session management.
+*   **AI Micro-Service (FastAPI/Python):** Offloads computationally expensive tasks like Neural Network inference and Anomaly Detection.
+*   **Communication:** Inter-service data exchange via high-speed RESTful protocols with a focus on fault-tolerance.
 
 ---
 
-## 🏗️ System Architecture
+## ⭐ Advanced Technical Highlights
 
-```mermaid
-graph TD
-    subgraph "Frontend Layer (React + Vite)"
-        UI[Glassmorphism Dashboard]
-        Charts[Recharts Analytics]
-        Auth[JWT Session Manager]
-    end
+### 1. **Stateless Security Architecture** 🔐
+*   **JWT zero-trust model**: Implemented a custom `OncePerRequestFilter` to validate tokens without server-side session overhead.
+*   **BCrypt Salting**: Industry-standard password hashing with defensive salt-and-pepper patterns.
 
-    subgraph "Security Layer"
-        Filter[JWT Auth Filter]
-        CORS[CORS Policy]
-        Inbound[Request Sanitization]
-    end
+### 2. **Transaction Intelligence (ML)** 🤖
+*   **Heuristic + Neural Categorization**: COMBINES fast keyword heuristics with an **NLP model** for high-accuracy spending analysis.
+*   **Unsupervised Anomaly Detection**: Uses **Isolation Forest** algorithms to detect fraudulent patterns without needing labeled historical fraud data—crucial for emerging banking platforms.
 
-    subgraph "Core Backend (Spring Boot 3.2.2)"
-        Service[Banking Service Layer]
-        AI[AI Categorization Engine]
-        Risk[Fraud Risk Meter]
-    end
+### 3. **High-Performance Persistence** �
+*   **Data Consistency**: Leverages Spring's `@Transactional` boundary manager to ensure atomicity in complex multi-step banking operations.
+*   **Optimized Queries**: Custom `@Query` aggregations for Category-Wise insights to minimize database round-trips.
 
-    subgraph "Data Persistence"
-        Repo[JPA Repository]
-        DB[(H2 Database / File System)]
-    end
+---
 
-    UI --> Auth
-    Auth --> Filter
-    Filter --> Service
-    Service --> AI
-    Service --> Risk
-    Service --> Repo
-    Repo --> DB
+## 🚀 Tech Stack & Design Patterns
+*   **Backend:** Java 25 (Optimized for Virtual Threads), Spring Boot, Hibernate (JPA).
+*   **AI/ML:** Python 3.9, PyTorch (Neural Networks), Scikit-Learn (Isolation Forest).
+*   **Frontend:** React 18, Vite (60FPS rendering), Recharts (SVG Analytics).
+*   **Design Patterns:** DTO Pattern, Repository Pattern, Singleton, Strategy Pattern (for categorization).
+
+---
+
+## 🔧 Deployment Readiness
+The system is packaged as a **Self-Contained Executable (JAR)**, featuring embedded server logic (Tomcat) and externalized configuration for immediate cloud deployment.
+
+### 1. Quick Start
+```bash
+# Backend
+mvn clean install
+mvn spring-boot:run
+
+# AI Service
+cd ml-service
+python main.py
+
+# Frontend
+cd banking-ui
+npm install && npm run dev
 ```
 
 ---
-
-## ⭐ Key "Edge" Features
-
-### 1. **AI-Powered Intelligence** 🤖
-*   **Instant Categorization**: Automatically tags expenses (Food, Shopping, Salary) using advanced keyword heuristics.
-*   **Fraud Risk Scoring**: Every transaction is instantly analyzed for risk (Safe, Medium, High) based on merchant and location profiles.
-*   **Smart Insights**: Dynamic spending tips provided in real-time via the `InsightsService`.
-
-### 2. **Professional Security** 🔐
-*   **JWT Authentication**: Industry-standard stateless session management.
-*   **Strict Validation**: Server-side RegEx validation for IDs, 10-digit phone numbers, and complex password enforcement.
-*   **Role-Based Access**: Granular protection of banking resources.
-
-### 3. **Premium User Experience** 💎
-*   **Interactive Dashboard**: Real-time spending trackers and animated category charts.
-*   **Glassmorphism Theme**: High-end aesthetic with vibrant gradients and smooth micro-animations.
-*   **Live Brain-Status**: Visual indicator showing the backend "AI Brain" processing data.
-
----
-
-## � Tech Stack
-
-| Component | Technology |
-| :--- | :--- |
-| **Language** | Java 17/25 (JDK 25 optimized) |
-| **Backend** | Spring Boot 3.2.2, Spring Security, JPA |
-| **Frontend** | React 18, Vite, Lucide Icons |
-| **Database** | H2 (File-based Persistence) |
-| **Data Viz** | Recharts (Responsive Analytics) |
-| **Tooling** | Maven, Swagger UI, Postman |
-
----
-
-## 🔧 Getting Started
-
-### 1. Backend Setup
-1. Clone the repository.
-2. Run `mvn clean install`.
-3. Start the server: `mvn spring-boot:run`.
-4. API access: **http://localhost:8080/swagger-ui.html**.
-
-### 2. Frontend Setup
-1. Navigate to `/banking-ui`.
-2. Run `npm install`.
-3. Run `npm run dev`.
-4. Open: **http://localhost:5173**.
-
----
-
-## � Core API Endpoints
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | User onboarding with strict validation |
-| `POST` | `/api/auth/login` | Secure JWT token generation |
-| `POST` | `/api/transactions` | AI-categorized entry + Risk scoring |
-| `GET` | `/api/insights/category-wise` | Spending analytics data |
-
----
-
-
----
-*Built with ❤️ for digital banking innovation.*
+*Built with a focus on Scalability, Intelligence, and Modern Backend Engineering.*
