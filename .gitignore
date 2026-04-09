@@ -1,64 +1,87 @@
+# Java/Maven
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+bin/
+out/
 
-### STS ###
-.apt_generated
+# IDE and Project Files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
 .classpath
-.factorypath
 .project
-.settings
+.factorypath
 .springBeans
 .sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+.apt_generated/
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Build and Package Files
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+dist/
+node_modules/
+**/node_modules/
+**/dist/
+**/build/
 
-### VS Code ###
-.vscode/
-
-### OS ###
-.DS_Store
-Thumbs.db
-
-### Logs ###
+# Logs and Temporary Files
 *.log
 /logs/
 build_log.txt
 run_log.txt
 backend_log.txt
 frontend_log.txt
+h2_check.txt
+*.tmp
+*.bak
+*.swp
 
-### Node/Frontend ###
-node_modules/
-**/node_modules/
-dist/
-**/dist/
-build/
-**/build/
+# OS Specific Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment and Secrets
 .env*
 !.env.example
+secrets.*
 
-# Frontend folders
-banking-ui/node_modules/
-banking-ui/dist/
-frontend/node_modules/
-frontend/dist/
+# Personal Interview Prep & Notes
+*_Prep.txt
+*_Prep.md
+IoC_DI_Annotations_Interview_Prep.txt
+JWT_Stateless_Security_Prep.txt
+SpringBoot_Basics_Interview_Prep.txt
+Backend_Interview_Prep.txt
+Backend_SystemDesign_Prep.txt
+PyTorch_Interview_Prep.txt
+Backend_AI_Banking_Interview_DeepDive.md
+
+# Local Scripts
+install-tools.ps1
+*-tools.ps1
 
 # Database
 data/
-h2_check.txt
+*.h2.db
+*.trace.db
+
+# Python (ML Service)
+__pycache__/
+*.py[cod]
+*$py.class
+autopep8
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
